@@ -17,7 +17,7 @@ class CreateArticlesTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->unsignedBigInteger('category_id');
+            $table->bigInteger('category_id')->unsigned();
             $table->LONGTEXT('body');
             $table->timestamps();
 

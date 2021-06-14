@@ -71,9 +71,12 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+      $article = Article::where('slug',$slug)->first();
+      return response()->json([
+        'data'  => $article
+      ]);
     }
 
     /**
@@ -84,7 +87,7 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
-        //
+      //
     }
 
     /**
@@ -94,9 +97,29 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
-        //
+      $validator = Validator::make($request->all(), [
+        // 'title'         => 'required|unique:articles|Max:100',
+        'body'          => 'required',
+        'category_id'   => 'required|exists:categories,id|numeric|min:1',
+      ]);
+
+      if ($validator->fails()) {
+        return response()->json(['errors'=>$validator->errors()], 401);
+      }
+
+      $article = Article::where('slug',$slug)->first();
+      $article->title       = $request->title;
+      $article->slug        = Str::slug($request->title);
+      $article->category_id = $request->category_id;
+      $article->body        = $request->body;
+      $article->save();
+
+      return response()->json([
+        'message' => 'Article created',
+        'data'    => $article
+      ],201);
     }
 
     /**

@@ -28,5 +28,5 @@ Route::group(['middleware' => 'auth:api'], function(){
   Route::resource('category','API\CategoryController');
 
   // Article
-  Route::resource('article','API\ArticleController');
+  Route::resource('/article','API\ArticleController');
 });
