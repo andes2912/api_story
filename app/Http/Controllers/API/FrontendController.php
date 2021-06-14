@@ -13,7 +13,7 @@ class FrontendController extends Controller
     {
       $article = Article::all();
 
-      return response()->json([
+      return \response()->json([
         'data'  => $article
       ],200);
     }
@@ -23,8 +23,16 @@ class FrontendController extends Controller
     {
       $article = Article::where('slug',$slug)->first();
 
-      return response()->json([
-        'data'  => $article
-      ],200);
+      if ($article) {
+        return \response()->json([
+          'data'  => $article
+        ],200);
+      }
+
+      return \response()->json([
+        'message'  => 'Berita Tidak Ditemukan',
+        'errors'   => 404
+      ],404);
+
     }
 }
