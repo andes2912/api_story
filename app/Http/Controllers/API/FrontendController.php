@@ -23,9 +23,12 @@ class FrontendController extends Controller
     {
       $article = Article::where('slug',$slug)->first();
 
-      if ($article) {
+      $more = Article::where('category_id',$article->category_id)->limit(4)->get();
+
+      if ($article || $more) {
         return \response()->json([
-          'data'  => $article
+          'data'  => $article,
+          'more'  => $more
         ],200);
       }
 
