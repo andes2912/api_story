@@ -169,6 +169,28 @@ Parameter :
 Method :
 - GET
 ```
+
+```bash
+# Request Article for Frontend
+http://127.0.0.1:8000/api/articles
+
+Parameter :
+- title
+
+Method :
+- GET
+```
+```bash
+# Request Show Article for Frontend
+http://127.0.0.1:3000/{slug}
+
+Parameter :
+- slug
+
+Method :
+- GET
+```
+
 ## Code for Frontend
 
 Frontend dibagun dengan Nuxt Js, [clone repo](https://github.com/andes2912/story_frontend).
