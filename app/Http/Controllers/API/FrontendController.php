@@ -11,7 +11,7 @@ class FrontendController extends Controller
     // article
     public function article()
     {
-      $article = Article::all();
+      $article = Article::select('id','title','slug','created_at','updated_at')->get();
 
       return \response()->json([
         'data'  => $article
