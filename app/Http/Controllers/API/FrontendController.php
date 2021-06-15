@@ -23,7 +23,7 @@ class FrontendController extends Controller
     {
       $article = Article::where('slug',$slug)->first();
 
-      $more = Article::where('category_id',$article->category_id)->limit(4)->get();
+      $more = Article::where('category_id',$article->category_id)->whereNotIn('slug', [$slug])->limit(4)->get();
 
       if ($article || $more) {
         return \response()->json([
