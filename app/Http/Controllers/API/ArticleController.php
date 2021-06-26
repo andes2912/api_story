@@ -57,6 +57,7 @@ class ArticleController extends Controller
         'slug'        => Str::slug($request->title),
         'category_id' => $request->category_id,
         'body'        => $request->body,
+        'status'      => $request->status,
       ]);
 
       return response()->json([
@@ -114,6 +115,7 @@ class ArticleController extends Controller
       $article->slug        = Str::slug($request->title);
       $article->category_id = $request->category_id;
       $article->body        = $request->body;
+      $article->status      = $request->status;
       $article->save();
 
       return response()->json([
