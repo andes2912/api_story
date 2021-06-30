@@ -2,26 +2,46 @@
 
 namespace App\Http\Controllers\API;
 
+use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Services\CategoryService;
 
 class CategoryController extends Controller
 {
+
+    protected $service;
+
+    public function __construct(CategoryService $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $category = Category::all();
-        return response()->json([
-          'data'  => $category,
-        ],200);
+        // $category = Category::all();
+        // return response()->json([
+        //   'data'  => $category,
+        // ],200);
+        try {
+
+            $result = $this->service->getList($request->all());
+
+            return laraResponse('Success.', $result)->success();
+
+        } catch (Exception $e) {
+            $code = $e->getCode() > 0 ? $e->getCode() : 500;
+            return laraResponse($e->getMessage())->customCode($code);
+        }
     }
 
     /**

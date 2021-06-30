@@ -11,7 +11,7 @@ class FrontendController extends Controller
     // article
     public function article()
     {
-      $article = Article::select('id','title','slug','created_at','updated_at')->get();
+      $article = Article::select('id','title','slug','created_at','updated_at')->where('status','Publish')->get();
 
       return \response()->json([
         'data'  => $article
@@ -23,7 +23,7 @@ class FrontendController extends Controller
     {
       $article = Article::where('slug',$slug)->first();
 
-      $more = Article::where('category_id',$article->category_id)->whereNotIn('slug', [$slug])->limit(4)->get();
+      $more = Article::where('category_id',$article->category_id)->whereNotIn('slug', [$slug])->limit(4)->where('status','Publish')->get();
 
       if ($article || $more) {
         return \response()->json([
