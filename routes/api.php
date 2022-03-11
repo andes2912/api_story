@@ -18,6 +18,7 @@ Route::post('login','API\AuthController@index');
 
 // Frontend
 Route::get('/articles','API\FrontendController@article');
+Route::get('/get-articles','API\FrontendController@articleAPI');
 Route::get('/articles/{slug}','API\FrontendController@showArticle');
 
 Route::group(['middleware' => 'auth:api'], function(){
