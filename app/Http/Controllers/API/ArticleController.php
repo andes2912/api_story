@@ -17,7 +17,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-      $article = Article::all();
+      $article = Article::orderBy('created_at','desc')->get();
 
       return response()->json([
         'data'  => $article

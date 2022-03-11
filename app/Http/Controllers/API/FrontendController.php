@@ -11,7 +11,16 @@ class FrontendController extends Controller
     // article
     public function article()
     {
-      $article = Article::select('id','title','slug','created_at','updated_at')->where('status','Publish')->get();
+      $article = Article::where('status','Publish')->orderBy('created_at','desc')->get();
+
+      return \response()->json([
+        'data'  => $article
+      ],200);
+    }
+
+    public function articleAPI()
+    {
+      $article = Article::where('status','Publish')->orderBy('created_at','desc')->limit(6)->get();
 
       return \response()->json([
         'data'  => $article
