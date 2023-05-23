@@ -19,15 +19,14 @@ Route::post('login','API\AuthController@index');
 // Frontend
 Route::get('/articles','API\FrontendController@article');
 Route::get('/get-articles','API\FrontendController@articleAPI');
-Route::get('/articles/{slug}','API\FrontendController@showArticle');
+Route::get('/articles','API\FrontendController@showArticle');
 
 Route::group(['middleware' => 'auth:api'], function(){
 	Route::get('profile', 'API\AuthController@profile');
 	Route::post('logout', 'API\AuthController@logout');
 
-  // Category
-  Route::resource('category','API\CategoryController');
-
-  // Article
-  Route::resource('/article','API\ArticleController');
+    Route::resources([
+        'article'   => 'API\ArticleController', // Article
+        'category'  => 'API\CategoryController' // Category
+    ]);
 });

@@ -3,13 +3,21 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ArticleRequest;
 use Illuminate\Http\Request;
 use App\Models\{Article};
+use App\Services\ArticleService;
 use Validator;
 use Auth;
 use Str;
 class ArticleController extends Controller
 {
+    protected $article;
+
+    public function __construct(ArticleService $article)
+    {
+        $this->article = $article;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,11 +25,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-      $article = Article::orderBy('created_at','desc')->get();
-
-      return response()->json([
-        'data'  => $article
-      ],200);
+        return $this->article->ListArticle();
     }
 
     /**
@@ -40,30 +44,9 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-      $validator = Validator::make($request->all(), [
-        'title'         => 'required|unique:articles|Max:100',
-        'body'          => 'required',
-        'category_id'   => 'required|exists:categories,id|numeric|min:1',
-      ]);
-
-      if ($validator->fails()) {
-        return response()->json(['errors'=>$validator->errors()], 401);
-      }
-
-      $article = Article::create([
-        'title'       => $request->title,
-        'slug'        => Str::slug($request->title),
-        'category_id' => $request->category_id,
-        'body'        => $request->body,
-        'status'      => $request->status,
-      ]);
-
-      return response()->json([
-        'message' => 'Article created',
-        'data'    => $article
-      ],201);
+      return $this->article->StoreArticle($request);
     }
 
     /**
@@ -74,10 +57,7 @@ class ArticleController extends Controller
      */
     public function show($slug)
     {
-      $article = Article::where('slug',$slug)->first();
-      return response()->json([
-        'data'  => $article
-      ]);
+        return $this->article->ShowArticle($slug);
     }
 
     /**
@@ -98,30 +78,9 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $slug)
+    public function update($slug, ArticleRequest $request)
     {
-      $validator = Validator::make($request->all(), [
-        // 'title'         => 'required|unique:articles|Max:100',
-        'body'          => 'required',
-        'category_id'   => 'required|exists:categories,id|numeric|min:1',
-      ]);
-
-      if ($validator->fails()) {
-        return response()->json(['errors'=>$validator->errors()], 401);
-      }
-
-      $article = Article::where('slug',$slug)->first();
-      $article->title       = $request->title;
-      $article->slug        = Str::slug($request->title);
-      $article->category_id = $request->category_id;
-      $article->body        = $request->body;
-      $article->status      = $request->status;
-      $article->save();
-
-      return response()->json([
-        'message' => 'Article created',
-        'data'    => $article
-      ],201);
+      return $this->article->UpdateArticle($request,$slug);
     }
 
     /**
