@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login','API\AuthController@index');
 
-// Frontend
-Route::get('/articles','API\FrontendController@article');
-Route::get('/get-articles','API\FrontendController@articleAPI');
-Route::get('/articles','API\FrontendController@showArticle');
+// FRONTEND
+Route::get('/articles','API\FrontendController@GetArticleService');
+Route::get('/show-articles/{slug}','API\FrontendController@ShowArticleService');
 
+// BACKEND
 Route::group(['middleware' => 'auth:api'], function(){
 	Route::get('profile', 'API\AuthController@profile');
 	Route::post('logout', 'API\AuthController@logout');

@@ -3,48 +3,26 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Services\FrontendService;
 use Illuminate\Http\Request;
-use App\Models\{Article,Category,User};
 
 class FrontendController extends Controller
 {
-    // article
-    public function article()
-    {
-      $article = Article::where('status','Publish')->orderBy('created_at','desc')->get();
+    protected $frontendService;
 
-      return \response()->json([
-        'data'  => $article
-      ],200);
+    public function __construct(FrontendService $frontendService)
+    {
+        $this->frontendService = $frontendService;
     }
 
-    public function articleAPI()
+    public function GetArticleService()
     {
-      $article = Article::where('status','Publish')->orderBy('created_at','desc')->limit(6)->get();
-
-      return \response()->json([
-        'data'  => $article
-      ],200);
+        return $this->frontendService->GetArticle();
     }
 
     // Show Article
-    public function showArticle($slug)
+    public function ShowArticleService($slug)
     {
-      $article = Article::where('slug',$slug)->first();
-
-      $more = Article::where('category_id',$article->category_id)->whereNotIn('slug', [$slug])->limit(4)->where('status','Publish')->get();
-
-      if ($article || $more) {
-        return \response()->json([
-          'data'  => $article,
-          'more'  => $more
-        ],200);
-      }
-
-      return \response()->json([
-        'message'  => 'Berita Tidak Ditemukan',
-        'errors'   => 404
-      ],404);
-
+        return $this->frontendService->ShowArticle($slug);
     }
 }
